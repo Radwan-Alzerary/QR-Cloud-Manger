@@ -174,7 +174,7 @@
                 // Generate barcode and QR
                 generateBarcode(data._id, `barcode${i}`);
                 generateQrBarcode(
-                  `http://78.141.210.148:4005/r/${data._id}`,
+                  `http://78.141.210.148:4005/visit/reg/${data._id}`,
                   `qrcode${i}`
                 );
               } catch (err) {

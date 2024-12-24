@@ -64,7 +64,7 @@ router.get("/visitor", async (req, res) => {
   res.render("visitorList",{visits} );
 });
 const cloudRouter = require("./cloud");
-router.use("/cloud", cloudRouter);
+router.use("/cloud",ensureAuthenticated, cloudRouter);
 
 
 
