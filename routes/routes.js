@@ -9,41 +9,56 @@ router.get("/", ensureAuthenticated, async (req, res) => {
   res.render("dashboard" );
 });
 // GET /admin/approve -> Show unapproved visitors
-router.get("/admin/approve", async (req, res) => {
+router.get("/admin/approve", ensureAuthenticated, async (req, res) => {
   try {
-    // Find all visitors where approved = false
     const unapprovedVisits = await Visit.find({ approved: false });
-    // Render a page that lists all unapproved visitors
-    res.render("admin/approve", { unapprovedVisits });
+    const approvedVisits = await Visit.find({ approved: true });
+    res.render("admin/approve", { unapprovedVisits, approvedVisits });
   } catch (error) {
     console.error("Error in GET /admin/approve:", error);
     res.status(500).send("Server Error");
   }
 });
-// routes/admin.js
 
-// GET /admin/approve/:id/doapprove -> Approve a visitor
-router.post("/admin/approve/:id/doapprove", async (req, res) => {
+// POST /admin/approve/:id/doapprove - Approve a visitor
+router.post("/admin/approve/:id/doapprove", ensureAuthenticated, async (req, res) => {
   try {
     const { id } = req.params;
     const visit = await Visit.findById(id);
 
     if (!visit) {
-      return res.status(404).send("Visit not found");
+      return res.status(404).json({ success: false, message: "Visit not found" });
     }
 
-    // Approve the visitor
     visit.approved = true;
     await visit.save();
 
-    // Redirect back to the unapproved visitors page
-    res.redirect("/admin/approve");
+    res.json({ success: true, message: "Visitor approved successfully" });
   } catch (error) {
-    console.error("Error in GET /admin/approve/:id/doapprove:", error);
-    res.status(500).send("Server Error");
+    console.error("Error in POST /admin/approve/:id/doapprove:", error);
+    res.status(500).json({ success: false, message: "Server Error" });
   }
 });
 
+// POST /admin/unapprove/:id - Unapprove a visitor
+router.post("/admin/unapprove/:id", ensureAuthenticated, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const visit = await Visit.findById(id);
+
+    if (!visit) {
+      return res.status(404).json({ success: false, message: "Visit not found" });
+    }
+
+    visit.approved = false;
+    await visit.save();
+
+    res.json({ success: true, message: "Visitor unapproved successfully" });
+  } catch (error) {
+    console.error("Error in POST /admin/unapprove/:id:", error);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+});
 router.get("/visitor", async (req, res) => {
   const visits = await Visit.find({registered:true,coming:true}).sort({ enterprise: 1 });
   res.render("visitorList",{visits} );

@@ -35,7 +35,7 @@ router.get('/register', (req, res) => {
   res.render('register')
 })
 router.post('/login', passport.authenticate('local', {
-  successRedirect: '/',
+  successRedirect: '/admin/approve',
   failureRedirect: '/admin/login',
   failureFlash: true,
 }), (req, res, next) => {

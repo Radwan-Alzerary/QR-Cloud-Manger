@@ -51,20 +51,7 @@ app.set("view engine", "ejs");
 app.use(require("./routes"));
 
 
-async function getDefaultDay() {
-  try {
-    const defaultDay = await Day.findOne({ isDefault: true });
-    if (defaultDay) {
-      console.log("Default day:", defaultDay);
-      return defaultDay;
-    } else {
-      console.log("No default day set.");
-      return null;
-    }
-  } catch (error) {
-    console.error("Error fetching default day:", error.message);
-  }
-}
+
 
 
 
