@@ -1,0 +1,24 @@
+<!-- views/admin/approve.ejs -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Approve Visitors</title>
+  </head>
+  <body>
+    <h1>Unapproved Visitors</h1>
+    <% if (unapprovedVisits && unapprovedVisits.length > 0) { %>
+      <ul>
+        <% unapprovedVisits.forEach((visit) => { %>
+          <li>
+            <strong>Name:</strong> <%= visit.name %> 
+            (<%= visit.email %>) 
+            |
+            <a href="/admin/approve/<%= visit._id %>/doapprove">Approve</a>
+          </li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      <p>No unapproved visitors.</p>
+    <% } %>
+  </body>
+</html>
