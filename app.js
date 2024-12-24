@@ -9,6 +9,8 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const flash = require("connect-flash");
 
+
+
 require("dotenv").config();
 require("./config/database");
 require("./config/passport")(passport);
@@ -16,7 +18,7 @@ require("./config/passport")(passport);
 require("./models/user");
 
 const app = express();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 4005;
 
 // Middleware
 app.use(compression());
@@ -47,6 +49,26 @@ app.set("view engine", "ejs");
 
 // Use your main routes (index.js)
 app.use(require("./routes"));
+
+
+async function getDefaultDay() {
+  try {
+    const defaultDay = await Day.findOne({ isDefault: true });
+    if (defaultDay) {
+      console.log("Default day:", defaultDay);
+      return defaultDay;
+    } else {
+      console.log("No default day set.");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching default day:", error.message);
+  }
+}
+
+
+
+
 
 // Start the server
 app.listen(port, () => {

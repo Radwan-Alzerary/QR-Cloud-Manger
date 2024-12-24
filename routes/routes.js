@@ -23,7 +23,7 @@ router.get("/admin/approve", async (req, res) => {
 // routes/admin.js
 
 // GET /admin/approve/:id/doapprove -> Approve a visitor
-router.get("/admin/approve/:id/doapprove", async (req, res) => {
+router.post("/admin/approve/:id/doapprove", async (req, res) => {
   try {
     const { id } = req.params;
     const visit = await Visit.findById(id);

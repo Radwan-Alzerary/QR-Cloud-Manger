@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Default Day - <%= dayName %></title>
+    <title>اليوم الافتراضي - <%= dayName %></title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/feather-icons"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
     <style>
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Tajawal', sans-serif;
         }
         .file-icon {
             width: 48px;
@@ -29,30 +29,26 @@
 <body class="bg-gray-100 min-h-screen">
     <div class="container mx-auto px-4 py-8">
         <div class="flex justify-between items-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">Files in Default Day: <%= dayName %></h1>
-            <a href="/cloud" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition duration-300 ease-in-out flex items-center">
-                <i data-feather="arrow-left" class="mr-2"></i>
-                Back to Cloud Index
-            </a>
+            <h1 class="text-3xl font-bold text-gray-800">الملفات في اليوم الافتراضي: <%= dayName %></h1>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             <% files.forEach(fileName => {
                 const ext = fileName.split('.').pop().toLowerCase();
                 let fileType, fileIcon;
                 if (ext === 'pdf') {
-                    fileType = 'PDF Document';
+                    fileType = 'مستند PDF';
                     fileIcon = 'pdf';
                 } else if (ext === 'mp4') {
-                    fileType = 'Video';
+                    fileType = 'فيديو';
                     fileIcon = 'video';
                 } else if (['jpg','jpeg','png','gif'].includes(ext)) {
-                    fileType = 'Image';
+                    fileType = 'صورة';
                     fileIcon = 'image';
                 } else if (ext === 'doc' || ext === 'docx') {
-                    fileType = 'Word Document';
+                    fileType = 'مستند Word';
                     fileIcon = 'word';
                 } else {
-                    fileType = 'Unknown file type';
+                    fileType = 'نوع ملف غير معروف';
                     fileIcon = 'unknown';
                 }
             %>
@@ -62,14 +58,14 @@
                     <h3 class="text-lg font-semibold text-gray-800 mb-2 truncate"><%= fileName %></h3>
                     <p class="text-sm text-gray-600 mb-4"><%= fileType %></p>
                     <div class="flex justify-between">
-                        <a href="/cloud/file/<%= dayName %>/<%= fileName %>" download class="text-blue-500 hover:text-blue-600 transition duration-300 ease-in-out flex items-center">
-                            <i data-feather="download" class="mr-1"></i>
-                            Download
-                        </a>
                         <button onclick="openViewer('/cloud/view/<%= dayName %>/<%= fileName %>', '<%= ext %>', '<%= fileName %>')" class="text-green-500 hover:text-green-600 transition duration-300 ease-in-out flex items-center">
-                            <i data-feather="eye" class="mr-1"></i>
-                            View
+                            <span class="ml-1">عرض</span>
+                            <i data-feather="eye"></i>
                         </button>
+                        <a href="/cloud/file/<%= dayName %>/<%= fileName %>" download class="text-blue-500 hover:text-blue-600 transition duration-300 ease-in-out flex items-center">
+                            <span class="ml-1">تحميل</span>
+                            <i data-feather="download"></i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -140,8 +136,8 @@
 
                     // Add navigation buttons
                     const prevButton = document.createElement('button');
-                    prevButton.textContent = 'Previous';
-                    prevButton.className = 'bg-blue-500 text-white px-4 py-2 rounded mr-2';
+                    prevButton.textContent = 'السابق';
+                    prevButton.className = 'bg-blue-500 text-white px-4 py-2 rounded ml-2';
                     prevButton.onclick = () => {
                         if (currentPage > 1) {
                             currentPage--;
@@ -151,7 +147,7 @@
                     };
 
                     const nextButton = document.createElement('button');
-                    nextButton.textContent = 'Next';
+                    nextButton.textContent = 'التالي';
                     nextButton.className = 'bg-blue-500 text-white px-4 py-2 rounded';
                     nextButton.onclick = () => {
                         if (currentPage < numPages) {
@@ -163,8 +159,8 @@
 
                     const navigation = document.createElement('div');
                     navigation.className = 'flex justify-between mt-4';
-                    navigation.appendChild(prevButton);
                     navigation.appendChild(nextButton);
+                    navigation.appendChild(prevButton);
                     content.appendChild(navigation);
                 });
             } else if (fileType === 'mp4') {
@@ -182,7 +178,7 @@
                 img.style.objectFit = 'contain';
                 content.appendChild(img);
             } else {
-                content.innerHTML = '<p class="text-gray-600">Preview not available for this file type.</p>';
+                content.innerHTML = '<p class="text-gray-600">المعاينة غير متاحة لهذا النوع من الملفات.</p>';
             }
         }
 
