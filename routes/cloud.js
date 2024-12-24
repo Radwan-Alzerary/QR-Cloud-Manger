@@ -5,6 +5,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const bcrypt = require("bcrypt");
+const ensureAuthenticated = require("../config/auth").userlogin;
 
 const Day = require("../models/Day"); // Mongoose model
 const Visit = require("../models/visiter");
@@ -77,7 +78,7 @@ const upload = multer({ storage, fileFilter });
 //-------------------------------------
 
 // (A) GET /cloud -> Index: List all days from DB
-router.get("/", async (req, res) => {
+router.get("/",ensureAuthenticated, async (req, res) => {
   try {
     const days = await Day.find().sort({ createdAt: 1 });
     res.render("storage/index", { days });
@@ -88,12 +89,12 @@ router.get("/", async (req, res) => {
 });
 
 // (B) GET /cloud/createDay -> form
-router.get("/createDay", (req, res) => {
+router.get("/createDay",ensureAuthenticated, (req, res) => {
   res.render("storage/createDay");
 });
 
 // (B) POST /cloud/createDay -> create new day
-router.post("/createDay", async (req, res) => {
+router.post("/createDay",ensureAuthenticated, async (req, res) => {
   try {
     const { newDayName } = req.body;
     if (!newDayName) {
@@ -121,7 +122,7 @@ router.post("/createDay", async (req, res) => {
 });
 
 // (C) GET /cloud/upload -> form
-router.get("/upload", async (req, res) => {
+router.get("/upload",ensureAuthenticated, async (req, res) => {
   try {
     // get all days from DB
     const days = await Day.find().sort({ createdAt: 1 });
@@ -133,7 +134,7 @@ router.get("/upload", async (req, res) => {
 });
 
 // (C) POST /cloud/upload -> handle upload
-router.post("/upload", upload.single("myfile"), (req, res) => {
+router.post("/upload",ensureAuthenticated, upload.single("myfile"), (req, res) => {
   if (!req.file) {
     return res.status(400).send("No valid file or file type not allowed.");
   }
@@ -226,7 +227,7 @@ router.post("/login", async (req, res) => {
   });
   
 // (F) GET /cloud/view/:dayName/:filename -> inline view (video, image, pdf)
-router.get("/view/:dayName/:filename", (req, res) => {
+router.get("/view/:dayName/:filename",ensureAuthenticated, (req, res) => {
   const { dayName, filename } = req.params;
   const filePath = path.join(baseUploadPath, dayName, filename);
 

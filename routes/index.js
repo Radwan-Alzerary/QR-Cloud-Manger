@@ -7,6 +7,7 @@ const Visit = require("../models/visiter");
 router.use("/admin", require("./users"));
 router.use("/visit", require("./visit"));
 router.use("/", require("./routes"));
+
 router.get("/new", async (req, res) => {
   const newVisit = new Visit();
   newVisit.indstrial = "مؤتمر الصيدلة";
